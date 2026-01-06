@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>Canine Haven Boutique</title>
+  <style>
+:root{--bg:#07070a;--gold:#d8b35a;--purple:#4c2a7a;--card:#0f0f14;--muted:#b9b9c7;--white:#fff}
+*{box-sizing:border-box} html,body{margin:0;padding:0;background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial}
+a{color:inherit}
+.wrap{max-width:520px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.hero{position:relative;padding:16px 16px 8px}
+.hero img{width:100%;border-radius:18px;display:block;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.overlay{position:absolute;inset:16px 16px 8px;border-radius:18px;pointer-events:none;background:linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.35), rgba(0,0,0,.55))}
+.section{padding:12px 16px}
+.h1{font-size:22px;font-weight:800;letter-spacing:.3px;margin:6px 0 4px}
+.p{color:var(--muted);line-height:1.35;margin:0 0 10px}
+.btnrow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.btn{flex:1;min-width:160px;border:none;border-radius:12px;padding:14px 12px;font-size:16px;font-weight:800;cursor:pointer;display:flex;gap:10px;align-items:center;justify-content:center}
+.btn.gold{background:linear-gradient(180deg,#f1d38a,#caa04a);color:#1a1205}
+.btn.purple{background:linear-gradient(180deg,#6b3fb4,#3d1f73);color:#fff}
+.btn.outline{background:transparent;border:2px solid var(--gold);color:var(--gold)}
+.small{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+.footer{margin-top:auto;padding:10px 16px 82px;color:var(--muted);text-align:center;font-size:12px}
+.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(10,10,14,.92);backdrop-filter: blur(10px);border-top:1px solid rgba(255,255,255,.08)}
+.nav .inner{max-width:520px;margin:0 auto;display:flex}
+.nav button{flex:1;background:transparent;border:none;color:var(--muted);padding:12px 6px;font-weight:800;cursor:pointer}
+.nav button.active{color:var(--gold)}
+.card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin:10px 16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.prod{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden}
+.prod img{width:100%;height:140px;object-fit:cover;display:block}
+.prod .meta{padding:10px}
+.prod .name{font-weight:900;font-size:14px;margin:0 0 4px}
+.prod .price{color:var(--gold);font-weight:900;margin:0 0 8px}
+.prod .actions{display:flex;gap:8px}
+.prod .actions button{flex:1;border:none;border-radius:10px;padding:10px;font-weight:900;cursor:pointer}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:86px;background:#111119;color:#fff;border:1px solid rgba(255,255,255,.12);padding:10px 12px;border-radius:12px;display:none;max-width:92vw}
+input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0e0e14;color:#fff;font-size:16px}
+.label{font-size:12px;color:var(--muted);margin:10px 0 6px}
+.linkbtn{width:100%;margin-top:10px}
+</style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <script>
+    window.CHB_CONFIG = {
+  "appName": "Canine Haven Boutique",
+  "affiliate": {
+    "pin": "1234",
+    "commissionRate": 0.15
+  },
+  "publicForms": {
+    "becomeAffiliateUrl": "https://forms.gle/PASTE_BECOME_AFFILIATE",
+    "supportUrl": "https://forms.gle/PASTE_SUPPORT",
+    "vipWaitlistUrl": "https://forms.gle/PASTE_VIP"
+  },
+  "affiliateLinks": {
+    "startHereUrl": "https://beacons.ai/PASTE_START_HERE",
+    "trainingUrl": "https://beacons.ai/PASTE_TRAINING",
+    "fourCornersUrl": "https://beacons.ai/PASTE_FOUR_CORNERS",
+    "teamBuilderUrl": "https://forms.gle/PASTE_TEAM_BUILDER",
+    "payoutsUrl": "https://forms.gle/PASTE_PAYOUTS",
+    "statsUrl": "https://docs.google.com/spreadsheets/d/PASTE_STATS_SHEET"
+  },
+  "menuLinks": {
+    "shop": {
+      "apparelUrl": "https://beacons.ai/PASTE_APPAREL",
+      "walkEssentialsUrl": "https://beacons.ai/PASTE_WALK",
+      "accessoriesUrl": "https://beacons.ai/PASTE_ACCESSORIES",
+      "bundlesUrl": "https://beacons.ai/PASTE_BUNDLES",
+      "petParentMerchUrl": "https://beacons.ai/PASTE_PET_PARENT_MERCH"
+    },
+    "about": {
+      "ourStoryUrl": "https://beacons.ai/PASTE_OUR_STORY",
+      "communityUrl": "https://instagram.com/PASTE_INSTAGRAM"
+    },
+    "workWithUs": {
+      "shareEarnUrl": "https://beacons.ai/PASTE_SHARE_EARN"
+    }
+  },
+  "products": [
+    {
+      "id": "sample1",
+      "name": "Cozy Jacket",
+      "price": "$49.00",
+      "image": "assets/products/sample1.jpg",
+      "squareLink": "https://square.link/u/PASTE_LINK_1"
+    },
+    {
+      "id": "sample2",
+      "name": "Walk Set",
+      "price": "$59.00",
+      "image": "assets/products/sample2.jpg",
+      "squareLink": "https://square.link/u/PASTE_LINK_2"
+    },
+    {
+      "id": "sample3",
+      "name": "Bandana",
+      "price": "$19.00",
+      "image": "assets/products/sample3.jpg",
+      "squareLink": "https://square.link/u/PASTE_LINK_3"
+    }
+  ]
+};
+  </script>
+  <script>
+(function(){
+  const CFG = window.CHB_CONFIG;
+
+  const $ = (sel, root=document)=>root.querySelector(sel);
+  const app = $("#app");
+  const toast = $("#toast");
+  const store = {
+    get(k,d=null){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d }catch(e){ return d } },
+    set(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+  };
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.style.display = "block";
+    setTimeout(()=> toast.style.display="none", 2200);
+  }
+
+  function openLink(url){
+    if(!url || /PASTE_/i.test(url)){
+      showToast("Link not set yet — paste it in config.");
+      return;
+    }
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  function affCodeFromUrl(){
+    const u = new URL(window.location.href);
+    const code = u.searchParams.get("aff");
+    return code ? code.trim() : "";
+  }
+
+  function ensureAffiliateFromUrl(){
+    const code = affCodeFromUrl();
+    if(code){
+      store.set("chb_aff", { code, at: Date.now() });
+    }
+  }
+
+  function getAffiliate(){
+    return store.get("chb_aff", null);
+  }
+
+  function clearAffiliate(){
+    localStorage.removeItem("chb_aff");
+  }
+
+  function generateCode(name){
+    const base = (name||"CHB").toUpperCase().replace(/[^A-Z0-9]+/g,"").slice(0,8) || "CHB";
+    const rand = Math.random().toString(36).slice(2,6).toUpperCase();
+    return `CHB-${base}-${rand}`;
+  }
+
+  function nav(active){
+    document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active", b.dataset.tab===active));
+  }
+
+  function renderHome(){
+    nav("home");
+    app.innerHTML = `
+      <div class="wrap">
+        <div class="hero">
+          <img src="assets/splash.png" alt="Canine Haven Boutique"/>
+          <div class="overlay"></div>
+        </div>
+        <div class="section" style="text-align:center">
+          <div class="h1">Welcome Dog Lovers!</div>
+          <div class="p">Shop & Earn with Canine Haven Boutique</div>
+
+          <div class="btnrow">
+            <button class="btn gold" id="btnCustomer">🛍️ I'm a Customer</button>
+            <button class="btn purple" id="btnAffiliate">⭐ I'm an Affiliate</button>
+          </div>
+
+          <div style="margin-top:10px">
+            <button class="btn outline" id="btnView">View Products</button>
+          </div>
+
+          <div style="margin-top:12px">
+            <button class="btn outline" id="btnBecome">🤍 Become an Affiliate</button>
+          </div>
+
+          <div class="small">powered by legacybuilt tech all rights reserved</div>
+        </div>
+        <div class="footer"></div>
+      </div>
+    `;
+
+    $("#btnCustomer").onclick = ()=> renderShop();
+    $("#btnView").onclick = ()=> renderShop();
+    $("#btnAffiliate").onclick = ()=> renderAffiliateGate();
+    $("#btnBecome").onclick = ()=> openLink(CFG.publicForms.becomeAffiliateUrl);
+  }
+
+  function renderShop(){
+    nav("shop");
+    const aff = getAffiliate();
+    const note = aff ? `<div class="card">Referral tag active: <b>${aff.code}</b></div>` : "";
+    const cards = CFG.products.map(p=>`
+      <div class="prod">
+        <img src="${p.image}" alt="${p.name}"/>
+        <div class="meta">
+          <div class="name">${p.name}</div>
+          <div class="price">${p.price}</div>
+          <div class="actions">
+            <button class="btn outline" data-view="${p.id}">View</button>
+            <button class="btn gold" data-buy="${p.id}">Buy</button>
+          </div>
+        </div>
+      </div>
+    `).join("");
+    app.innerHTML = `<div class="wrap">${note}<div class="card"><b>Shop</b><div class="p">Tap Buy to open Square checkout.</div></div>
+      <div class="section"><div class="grid">${cards}</div></div>
+      <div class="footer"></div></div>`;
+
+    document.querySelectorAll("[data-buy]").forEach(btn=>{
+      btn.onclick = ()=>{
+        const id = btn.getAttribute("data-buy");
+        const p = CFG.products.find(x=>x.id===id);
+        // light click tracking
+        const clicks = store.get("chb_clicks", {});
+        clicks[id] = (clicks[id]||0)+1;
+        store.set("chb_clicks", clicks);
+        openLink(p.squareLink);
+      };
+    });
+    document.querySelectorAll("[data-view]").forEach(btn=>{
+      btn.onclick = ()=>{
+        const id = btn.getAttribute("data-view");
+        const p = CFG.products.find(x=>x.id===id);
+        app.innerHTML = `<div class="wrap">
+          <div class="card"><button class="btn outline" id="backShop">← Back</button></div>
+          <div class="card">
+            <img src="${p.image}" alt="${p.name}" style="width:100%;border-radius:14px;display:block"/>
+            <div style="margin-top:10px;font-weight:900;font-size:18px">${p.name}</div>
+            <div class="p">${p.price}</div>
+            <button class="btn gold linkbtn" id="buyNow">Buy with Square</button>
+          </div>
+          <div class="footer"></div>
+        </div>`;
+        $("#backShop").onclick = ()=> renderShop();
+        $("#buyNow").onclick = ()=> openLink(p.squareLink);
+      };
+    });
+  }
+
+  function renderSupport(){
+    nav("support");
+    app.innerHTML = `<div class="wrap">
+      <div class="card"><b>Support</b><div class="p">Need help with an order or a question?</div>
+        <button class="btn outline linkbtn" id="support">Order Help</button>
+        <button class="btn outline linkbtn" id="vip">VIP Waitlist</button>
+      </div>
+      <div class="footer"></div>
+    </div>`;
+    $("#support").onclick = ()=> openLink(CFG.publicForms.supportUrl);
+    $("#vip").onclick = ()=> openLink(CFG.publicForms.vipWaitlistUrl);
+  }
+
+  function renderMenu(){
+    nav("menu");
+    const ml = CFG.menuLinks;
+    app.innerHTML = `<div class="wrap">
+      <div class="card"><b>🐶 SHOP</b>
+        <button class="btn outline linkbtn" id="m_apparel">1️⃣ Apparel</button>
+        <button class="btn outline linkbtn" id="m_walk">2️⃣ Walk Essentials</button>
+        <button class="btn outline linkbtn" id="m_access">3️⃣ Accessories</button>
+        <button class="btn outline linkbtn" id="m_bundles">4️⃣ Bundles</button>
+        <button class="btn outline linkbtn" id="m_ppm">5️⃣ Pet Parent Merch</button>
+      </div>
+      <div class="card"><b>🐾 ABOUT / BRAND</b>
+        <button class="btn outline linkbtn" id="m_story">6️⃣ Our Story</button>
+        <button class="btn outline linkbtn" id="m_comm">7️⃣ Community</button>
+      </div>
+      <div class="card"><b>🤍 WORK WITH US</b>
+        <button class="btn outline linkbtn" id="m_share">8️⃣ Share & Earn</button>
+      </div>
+      <div class="card"><b>🛒 SUPPORT</b>
+        <button class="btn outline linkbtn" id="m_support">9️⃣ Support</button>
+      </div>
+      <div class="footer"></div>
+    </div>`;
+    $("#m_apparel").onclick = ()=> openLink(ml.shop.apparelUrl);
+    $("#m_walk").onclick = ()=> openLink(ml.shop.walkEssentialsUrl);
+    $("#m_access").onclick = ()=> openLink(ml.shop.accessoriesUrl);
+    $("#m_bundles").onclick = ()=> openLink(ml.shop.bundlesUrl);
+    $("#m_ppm").onclick = ()=> openLink(ml.shop.petParentMerchUrl);
+    $("#m_story").onclick = ()=> openLink(ml.about.ourStoryUrl);
+    $("#m_comm").onclick = ()=> openLink(ml.about.communityUrl);
+    $("#m_share").onclick = ()=> openLink(ml.workWithUs.shareEarnUrl);
+    $("#m_support").onclick = ()=> renderSupport();
+  }
+
+  function renderAffiliateGate(){
+    nav("affiliate");
+    const aff = getAffiliate();
+    const hasAff = aff && aff.code;
+    app.innerHTML = `<div class="wrap">
+      <div class="hero"><img src="assets/splash.png" alt="Canine Haven"/></div>
+      <div class="card">
+        <b>Affiliate Access</b>
+        <div class="p">Enter the PIN to unlock, or open the app with your ?aff=CODE link.</div>
+        <div class="label">PIN</div>
+        <input id="pin" inputmode="numeric" placeholder="Enter PIN"/>
+        <button class="btn purple linkbtn" id="unlock">Unlock</button>
+        ${hasAff ? `<div class="small" style="margin-top:10px">Active code: <b>${aff.code}</b></div>` : ``}
+        <button class="btn outline linkbtn" id="apply">🤍 Become an Affiliate</button>
+      </div>
+      <div class="footer"></div>
+    </div>`;
+    $("#unlock").onclick = ()=>{
+      const pin = ($("#pin").value||"").trim();
+      if(pin === CFG.affiliate.pin){
+        store.set("chb_aff_unlocked", true);
+        renderAffiliateCenter();
+      }else{
+        showToast("Incorrect PIN");
+      }
+    };
+    $("#apply").onclick = ()=> openLink(CFG.publicForms.becomeAffiliateUrl);
+
+    // If they already have an aff code in URL, allow direct entry
+    const urlCode = affCodeFromUrl();
+    if(urlCode){
+      store.set("chb_aff", { code:urlCode, at: Date.now() });
+      store.set("chb_aff_unlocked", true);
+      renderAffiliateCenter();
+    }
+  }
+
+  function renderAffiliateCenter(){
+    nav("affiliate");
+    const unlocked = store.get("chb_aff_unlocked", false);
+    if(!unlocked){
+      renderAffiliateGate();
+      return;
+    }
+    let aff = getAffiliate();
+    if(!aff || !aff.code){
+      // allow generation
+      aff = { code:"", at: Date.now() };
+    }
+    const baseUrl = window.location.origin && window.location.origin !== "null" ? window.location.origin : "https://yourapp.com";
+    const shareLink = aff.code ? `${baseUrl}/?aff=${encodeURIComponent(aff.code)}` : "";
+    const clicks = store.get("chb_clicks", {});
+    const totalClicks = Object.values(clicks).reduce((a,b)=>a+b,0);
+
+    app.innerHTML = `<div class="wrap">
+      <div class="card">
+        <b>Affiliate Center</b>
+        <div class="p">Private tools for approved affiliates.</div>
+      </div>
+
+      <div class="card">
+        <b>Your Link</b>
+        <div class="p">Generate your code, then copy your share link.</div>
+        <div class="label">Your Name (optional)</div>
+        <input id="affName" placeholder="April"/>
+        <button class="btn purple linkbtn" id="gen">Generate Code</button>
+
+        <div class="label">Affiliate Code</div>
+        <input id="affCode" value="${aff.code||""}" readonly/>
+        <button class="btn outline linkbtn" id="copyCode">Copy Code</button>
+
+        <div class="label">Share Link</div>
+        <input id="shareLink" value="${shareLink}" readonly/>
+        <button class="btn gold linkbtn" id="copyLink">Copy Link</button>
+      </div>
+
+      <div class="card">
+        <b>Start Here</b>
+        <button class="btn outline linkbtn" id="startHere">Open</button>
+        <b style="display:block;margin-top:12px">Training</b>
+        <button class="btn outline linkbtn" id="training">Open</button>
+        <b style="display:block;margin-top:12px">Four Corners</b>
+        <button class="btn outline linkbtn" id="fourCorners">Open</button>
+        <b style="display:block;margin-top:12px">Team Builder</b>
+        <button class="btn outline linkbtn" id="teamBuilder">Open</button>
+        <b style="display:block;margin-top:12px">Payouts</b>
+        <button class="btn outline linkbtn" id="payouts">Open</button>
+        <b style="display:block;margin-top:12px">Stats</b>
+        <div class="p">Launch stats (device/session): clicks + estimates.</div>
+        <div class="p"><b>Total clicks:</b> ${totalClicks}</div>
+        <button class="btn outline linkbtn" id="statsLink">Open Stats Link</button>
+      </div>
+
+      <div class="card">
+        <button class="btn outline linkbtn" id="lock">Lock Affiliate Center</button>
+      </div>
+
+      <div class="footer"></div>
+    </div>`;
+
+    $("#gen").onclick = ()=>{
+      const name = ($("#affName").value||"").trim();
+      const code = generateCode(name);
+      store.set("chb_aff", { code, at: Date.now() });
+      showToast("Code generated");
+      renderAffiliateCenter();
+    };
+    $("#copyCode").onclick = ()=>{
+      const v = $("#affCode").value;
+      if(!v){ showToast("Generate a code first"); return; }
+      navigator.clipboard?.writeText(v).then(()=>showToast("Copied"));
+    };
+    $("#copyLink").onclick = ()=>{
+      const v = $("#shareLink").value;
+      if(!v){ showToast("Generate a code first"); return; }
+      navigator.clipboard?.writeText(v).then(()=>showToast("Copied"));
+    };
+
+    $("#startHere").onclick = ()=> openLink(CFG.affiliateLinks.startHereUrl);
+    $("#training").onclick = ()=> openLink(CFG.affiliateLinks.trainingUrl);
+    $("#fourCorners").onclick = ()=> openLink(CFG.affiliateLinks.fourCornersUrl);
+    $("#teamBuilder").onclick = ()=> openLink(CFG.affiliateLinks.teamBuilderUrl);
+    $("#payouts").onclick = ()=> openLink(CFG.affiliateLinks.payoutsUrl);
+    $("#statsLink").onclick = ()=> openLink(CFG.affiliateLinks.statsUrl);
+
+    $("#lock").onclick = ()=>{
+      localStorage.removeItem("chb_aff_unlocked");
+      showToast("Locked");
+      renderHome();
+    };
+  }
+
+  function mountNav(){
+    const navEl = document.createElement("div");
+    navEl.className = "nav";
+    navEl.innerHTML = `<div class="inner">
+      <button data-tab="home">Home</button>
+      <button data-tab="shop">Shop</button>
+      <button data-tab="menu">Menu</button>
+      <button data-tab="support">Support</button>
+      <button data-tab="affiliate">Affiliate</button>
+    </div>`;
+    document.body.appendChild(navEl);
+
+    navEl.querySelectorAll("button").forEach(b=>{
+      b.onclick = ()=>{
+        const t=b.dataset.tab;
+        if(t==="home") renderHome();
+        if(t==="shop") renderShop();
+        if(t==="menu") renderMenu();
+        if(t==="support") renderSupport();
+        if(t==="affiliate") renderAffiliateGate();
+      };
+    });
+  }
+
+  // Boot
+  ensureAffiliateFromUrl();
+  mountNav();
+  renderHome();
+})();
+</script>
+</body>
+</html>
